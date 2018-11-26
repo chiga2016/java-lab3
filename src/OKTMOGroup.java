@@ -4,9 +4,9 @@ import java.util.stream.Collectors;
 public class OKTMOGroup {
     private String name;
     private long code;
-    long parentCode;
+    private long parentCode;
     private enum OKTMOLevel {REGION, RAYON_CITY, SEL_MO, NP}
-    List<OKTMOGroup> arrGroup = new ArrayList<OKTMOGroup>() ;
+    protected List<OKTMOGroup> arrGroup = new ArrayList<OKTMOGroup>() ;
     //KRAI,OBLAST,AVTO_OBLAST, AVTO_OKRUG,REPUBLIC,, CITY_AREAL,CITY_OKRUG, PGT, SEL_P
     protected OKTMOLevel level ;
 
@@ -16,9 +16,6 @@ public class OKTMOGroup {
         this.level = defineLevel(code);
         this.parentCode = parentCode(code);
     }
-
-
-
     public void setParentCode(long parentCode) {
         this.parentCode = parentCode;
     }
@@ -28,14 +25,20 @@ public class OKTMOGroup {
     }
 
     public long parentCode (long code){
-        if (defineLevel(code) == OKTMOLevel.SEL_MO) {
-            return (long) ((int) (code / 1000000)) * 1000000;
+//80 643 455 111
+        final OKTMOLevel oktmoLevel = defineLevel(code);
+        if (oktmoLevel == OKTMOLevel.REGION) {
+            return 0L;
         }
-        if (defineLevel(code) == OKTMOLevel.RAYON_CITY) {
-            return (long) ((int) (code / 1000000000)) * 1000000000;
+
+        if (oktmoLevel == OKTMOLevel.RAYON_CITY) {
+            return (long) ( code / 1000000000) * 1000000000;
         }
-        if (defineLevel(code) == OKTMOLevel.NP) {
-            return (long) ((int) (code / 1000)) * 1000;
+        if (oktmoLevel == OKTMOLevel.SEL_MO) {
+            return (long) ( code / 1000000 ) * 1000000;
+        }
+        if (oktmoLevel == OKTMOLevel.NP) {
+            return (long) (code / 1000) * 1000;
         }
 
         return 0;
@@ -45,6 +48,20 @@ public class OKTMOGroup {
                 .stream().map(p-> p.getName()).collect(Collectors.joining(";"));
         return tostring;
     }
+
+    public long endCode() {
+        int countZero = countZero(this.getCode());
+        String nineString = "";
+        long nineLong = 0;
+        long endCode;
+        for (int i = 0; i < countZero; i++) {
+            nineString = nineString + 9;
+        }
+        nineLong = Long.parseLong(nineString);
+        endCode = this.getCode() + nineLong;
+        return endCode;
+    }
+
 
     public static int countZero (long code) {
         int countZero=0;
@@ -61,17 +78,18 @@ public class OKTMOGroup {
 
     public static OKTMOLevel defineLevel (long code) {
         OKTMOLevel level = null;
-        if (countZero(code)<3 ) {
+        int zeros = countZero(code);
+        if (zeros <3 ) {
             level = OKTMOLevel.NP;
         }
 
-        if (countZero(code)>=3 && countZero(code)<6) {
+        if (zeros >=3 && zeros <6) {
             level = OKTMOLevel.SEL_MO;
         }
-        else if (countZero(code)>=6 && countZero(code)<9 ) {
+        else if (zeros >=6 && zeros <9 ) {
             level = OKTMOLevel.RAYON_CITY;
         }
-        else if (countZero(code)==9) {
+        else if (zeros ==9) {
             level = OKTMOLevel.REGION;
         }
         return level;

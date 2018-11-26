@@ -1,14 +1,14 @@
 import java.util.*;
 
 public class OktmoData {
-    private HashSet<String> allStatuses = new HashSet<String>();
+    //private HashSet<String> allStatuses = new HashSet<String>();
 
-    Map<Long, OKTMOGroup> oktmoGroupMap = new HashMap<>();
+    TreeMap<Long, OKTMOGroup> oktmoGroupMap = new TreeMap<>();
     Map<Long,Place> npMap = new TreeMap<Long, Place>();
 
     public void addParentGroup (OKTMOGroup gr1) {
         try {
-            oktmoGroupMap.get(gr1.parentCode).arrGroup.add(gr1);
+            oktmoGroupMap.get(gr1.getParentCode()).arrGroup.add(gr1);
         }
         catch (NullPointerException ex) {
             //System.err.println(ex.getMessage());

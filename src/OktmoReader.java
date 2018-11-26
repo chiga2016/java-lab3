@@ -13,7 +13,7 @@ public class OktmoReader {
     int maxStr = 0;
 
 
-    public void readPlaces_lab3(String fileName, OktmoData data, int maxStr) {
+    public void readPlaces_lab3(String fileName, OktmoData data) {
         int lineCount = 0;
         Pattern codePatch = Pattern.compile("(\\d+)\";\"(\\d+)\";\"(\\d+)\";\"(\\d+)\";\"(\\d+)\";\"(\\d+)\";\"([^;]*)\";\"([^;]*)\";\"");
         Pattern statusPattern = Pattern.compile("(.[^А-Я]+)");
@@ -34,7 +34,11 @@ public class OktmoReader {
                 code = 0;
 
                 Matcher m = codePatch.matcher(s);
-                m.find();
+
+                if (!m.find()) {
+                    System.out.println("error in line:\n"+s);System.exit(1);
+                    continue;
+                }
                 //System.out.println(m.groupCount());
                 code = Long.parseLong(m.group(1) + m.group(2) + m.group(3) + m.group(4));
                 //String name = (m.group(8) + " " + m.group(7)).trim();
@@ -45,14 +49,17 @@ public class OktmoReader {
                     if (OKTMOGroup.countZero(code) < 3) {
                         if (name != null) {
                             Matcher mStatus = statusPattern.matcher(name);
-                            mStatus.find();
+                            if (!mStatus.find()) {
+                                System.out.println("error in line:\n"+s);System.exit(1);
+                                continue;
+                            }
                             status = mStatus.group(1);
                         }
-                        if (status != null) {
-                            name = name.substring(status.length());
-                        } else {
-                            name = name;
-                        }
+                            if (status != null) {
+                                name = name.substring(status.length());
+                            } else {
+                                name = name;
+                            }
 
                         Place place = new Place(code, name, status);
                         data.npMap.put(code, place);

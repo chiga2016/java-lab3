@@ -11,7 +11,7 @@ public class OKTMO_test_lab3 {
         OktmoReader ok3 = new OktmoReader();
         OktmoData dat3 = new OktmoData();
         long t0 = System.currentTimeMillis();
-        ok3.readPlaces_lab3("data-201710.csv", dat3, 10);
+        ok3.readPlaces_lab3("data-201710.csv", dat3);
         double countGr  =
                 dat3.oktmoGroupMap.entrySet()
                         .stream()

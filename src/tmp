@@ -1,0 +1,10 @@
+
+//        for (String item: lst) {
+//            if (item!=null) {
+//                AtomicInteger value = instances.get(item);
+//                if (value == null)
+//                    instances.put(item, new AtomicInteger(1));
+//                else
+//                    value.incrementAndGet();
+//            }
+//        }
