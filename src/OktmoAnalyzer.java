@@ -1,22 +1,19 @@
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class OktmoAnalyzer {
 
-    public static List<String> findAllPlacesInGroup(OKTMOGroup group, OktmoData data3) {
+    public static List<OKTMOGroup> findAllPlacesInGroup1(OKTMOGroup group, OktmoData data3) {
         SortedMap<Long, OKTMOGroup> tmpTreemap = new TreeMap<Long, OKTMOGroup>();
         tmpTreemap = data3.oktmoGroupMap.subMap(group.getCode(), group.endCode());
-        List<String> lst = new ArrayList<String>();
+        List<OKTMOGroup> lst= //= new ArrayList<OKTMOGroup>();
         tmpTreemap.values()
                 .stream()
-                .forEach(s -> {
-                   lst.add(s.getName());
-                   //  System.out.println(s.getName() + " " + s.getLevel() +" " + s.getCode());
-                });
+                .collect(Collectors.toList());
         return lst;
     }
+
     static class Counter implements Comparable<Counter>{
         int count=1;
         void add() {count++;}
@@ -32,58 +29,47 @@ public class OktmoAnalyzer {
         }
     }
 
-    public static void findMostPopularPlaceName(OKTMOGroup group, OktmoData data3) {
-        List<String> lst = findAllPlacesInGroup(group,data3);
-       // Map<String, Integer> countMap = new HashMap<>();
-//        Map<String,Long> np = new TreeMap<>();
-//                lst.stream()
-//        .collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-//        .forEach({p -> System.out.println(p)
-//        });
-//
-        //map.entrySet().stream()
-        //.sorted(Comparator.comparing(p -> p.getValue()))
-
+    public static void findMostPopularPlaceName1(OKTMOGroup group, OktmoData data3) {
+        List<OKTMOGroup> lst = findAllPlacesInGroup1(group,data3);
         Map<String, Counter> np = new TreeMap<String, Counter>();
         lst.stream()
-        .forEach(item->{
-                Counter value = np.get(item);
-                if (value == null)
-                    np.put(item, new Counter());
-                else
-                    value.add();
-        });
-//Comparator.
+                .map(x-> x.getName())
+                .forEach(item->{
+                    Counter value = np.get(item);
+                    if (value == null)
+                        np.put(item, new Counter());
+                    else
+                        value.add();
+                });
         np.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue))
-       // np.entrySet().stream().sorted((a,b)->a.getValue().compareTo(b.getValue()))
+                // np.entrySet().stream().sorted((a,b)->a.getValue().compareTo(b.getValue()))
                 .forEach(System.out::println);
-        }
-
-    public static void printStatusTableForRegion(String region,OktmoData data){
-        List<OKTMOGroup> printList = new ArrayList<>();
-        printList=
-        data.oktmoGroupMap.entrySet().stream()
-                .filter(p->p.getValue().getName().contains(region))
-                .flatMap(
-                        x-> (findAllPlacesInGroup(x.getValue(),data))
-                )
-                .
-                //.map(a->findAllPlacesInGroup(a.getValue(),data))
-                //.forEach(p->{
-                   // findAllPlacesInGroup(p.getValue(),data).stream()
-                  //  .collect(Collectors.groupingBy(f->f,Collectors.counting()))
-                         //   .forEach(c-> {System.out.println(c.toString()); });
-                   // System.out.println(p.toString());
-                     //    .forEach(s-> System.out.println(s));
-                    //findAllPlacesInGroup(p.getValue());
-                //});
-
-                //.forEach(p-> System.out.println(p.getValue().getName()));
-
-
     }
 
 
+    public static void printStatusTableForRegion(String region,OktmoData data){
+        data.oktmoGroupMap.entrySet().stream()
+                .filter(p->p.getValue().getName().contains(region))
+                .map(x->findAllPlacesInGroup1(x.getValue(),data))
+                .forEach(x->{
+                    x.stream()
+                            .collect(Collectors.groupingBy(e -> e.getLevel(), Collectors.counting()))
+                            .entrySet().stream()
+                                .sorted(Comparator.comparing(Map.Entry::getValue))
+                                .forEach(g-> System.out.println( g.getKey() + " " + g.getValue()));
+                           // .forEach(System.out::println);
+                           // .forEach(p,k -> System.out.println(p));
+//                            .forEach(d->{
+//                                System.out.println(d.getClass());
+//                               // a.getAndIncrement();
+//
+//                               // System.out.println(a+ " "+y.getCode() + " " + y.getName() + " " + y.getLevel());
+//                            });
+
+
+
+                });
+    }
 }
 
 

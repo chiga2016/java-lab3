@@ -32,7 +32,7 @@ public class OktmoMain {
 //     }
 // ИЛИ
 
-       /// Вложенные группы
+//       // Вложенные группы
 //        data3.oktmoGroupMap.entrySet()
 //                .stream()
 //                .sorted(Map.Entry.comparingByKey())
@@ -46,15 +46,15 @@ public class OktmoMain {
 
 ////findAllPlacesInGroup
 //        OKTMOGroup okt2 = new OKTMOGroup("Башкортостан",80600000000L);
-//        OktmoAnalyzer.findAllPlacesInGroup(okt2,data3).stream()
+//        OktmoAnalyzer.findAllPlacesInGroup1(okt2,data3).stream()
 //        .forEach(s-> {
 //            k.getAndIncrement();
-//            System.out.println(k + " "+ s);
+//            System.out.println(k + " "+ s.getName() + " " + s.getCode() + " ");
 //
 //        });
 //// findMostPopularPlaceName
 //        OKTMOGroup okt2 = new OKTMOGroup("Башкортостан",80600000000L);
-//        OktmoAnalyzer.findMostPopularPlaceName(okt2,data3);
+//        OktmoAnalyzer.findMostPopularPlaceName1(okt2,data3);
 
 ////printStatusTableForRegion
 OktmoAnalyzer.printStatusTableForRegion("Муниципальные районы Республики Башкортостан",data3);

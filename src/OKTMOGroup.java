@@ -5,7 +5,7 @@ public class OKTMOGroup {
     private String name;
     private long code;
     private long parentCode;
-    private enum OKTMOLevel {REGION, RAYON_CITY, SEL_MO, NP}
+    protected enum OKTMOLevel {REGION, RAYON_CITY, SEL_MO, NP}
     protected List<OKTMOGroup> arrGroup = new ArrayList<OKTMOGroup>() ;
     //KRAI,OBLAST,AVTO_OBLAST, AVTO_OKRUG,REPUBLIC,, CITY_AREAL,CITY_OKRUG, PGT, SEL_P
     protected OKTMOLevel level ;
