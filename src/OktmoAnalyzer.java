@@ -46,27 +46,23 @@ public class OktmoAnalyzer {
                 .forEach(System.out::println);
     }
 
-
     public static void printStatusTableForRegion(String region,OktmoData data){
+
+
         data.oktmoGroupMap.entrySet().stream()
+                .filter(p->p.getValue().getLevel()== OKTMOGroup.OKTMOLevel.REGION)
                 .filter(p->p.getValue().getName().contains(region))
+             //   .forEach(p-> System.out.println(p.getValue().toString()));
+                .peek(p-> System.out.println(p.getValue().getCode() + " " + p.getValue().getName()/* + " " + p.getValue().getLevel()  + " "+ p.getValue().endCode() */))
                 .map(x->findAllPlacesInGroup1(x.getValue(),data))
+
                 .forEach(x->{
                     x.stream()
-                            .collect(Collectors.groupingBy(e -> e.getLevel(), Collectors.counting()))
-                            .entrySet().stream()
-                                .sorted(Comparator.comparing(Map.Entry::getValue))
-                                .forEach(g-> System.out.println( g.getKey() + " " + g.getValue()));
-                           // .forEach(System.out::println);
-                           // .forEach(p,k -> System.out.println(p));
-//                            .forEach(d->{
-//                                System.out.println(d.getClass());
-//                               // a.getAndIncrement();
-//
-//                               // System.out.println(a+ " "+y.getCode() + " " + y.getName() + " " + y.getLevel());
-//                            });
 
-
+                                    .collect(Collectors.groupingBy(e -> e.getLevel(), Collectors.counting()))
+                                    .entrySet().stream()
+                                        .sorted(Comparator.comparing(Map.Entry::getValue))
+                                        .forEach(g-> System.out.println( g.getKey() + " " + g.getValue()));
 
                 });
     }

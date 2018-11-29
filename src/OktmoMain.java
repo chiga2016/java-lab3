@@ -57,7 +57,8 @@ public class OktmoMain {
 //        OktmoAnalyzer.findMostPopularPlaceName1(okt2,data3);
 
 ////printStatusTableForRegion
-OktmoAnalyzer.printStatusTableForRegion("Муниципальные районы Республики Башкортостан",data3);
+        //Муниципальные районы Республики Башкортостан
+        OktmoAnalyzer.printStatusTableForRegion("Краснодар",data3);
      //.forEach(s-> System.out.println(s.getKey()+" "+s.getValue().getParentCode() +" " + s.getValue().getName() + " " + s.getValue().getLevel() ));
 
 
